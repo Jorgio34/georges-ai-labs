@@ -76,6 +76,7 @@ def kind(n, ranks):
         if ranks.count(r) == n: return r
     return None
 
+
 def two_pair(ranks):
     """If there are two pair here, return the two 
     ranks of the two pairs, else None."""
