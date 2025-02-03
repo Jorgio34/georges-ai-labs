@@ -7,7 +7,7 @@ from util.llm_utils import pretty_stringify_chat, ollama_seed as seed
 
 # Add your code below
 sign_your_name = 'Jonathan Piatchou'
-model = 'gpt-3.5-turbo'  
+model = 'llama3.2'  # Updated model name
 options = {
     'temperature': 0.7,
     'max_tokens': 150,
@@ -19,25 +19,36 @@ options = {
 messages = []
 
 # Chat loop
-while True:
-    # Get user input
-    user_input = input("You: ")
-    
-    # Append user message to messages list
-    messages.append({'role': 'user', 'content': user_input})
-    
-    # Get response from the chat model
-    response = chat(model=model, messages=messages, stream=False, options=options)
-    
-    # Append assistant's response to messages list
-    messages.append({'role': 'assistant', 'content': response['content']})
-    
-    # Print assistant's response
-    print(f"Assistant: {response['content']}")
-    
-    # Check for exit condition
-    if user_input.lower() == '/exit':
-        break
+try:
+    while True:
+        # Get user input
+        user_input = input("You: ")
+        
+        # Check for exit condition
+        if user_input.lower() in ['/exit', 'exit', 'quit']:
+            print("Exiting chat...")
+            break
+        
+        # Append user message to messages list
+        messages.append({'role': 'user', 'content': user_input})
+        
+        # Get response from the chat model
+        response = chat(model=model, messages=messages, stream=False, options=options)
+        
+        # Extract the actual message content
+        if 'message' in response and 'content' in response['message']:
+            assistant_message = response['message']['content']
+        else:
+            print("Unexpected response format:", response)
+            continue
+        
+        # Append assistant's response to messages list
+        messages.append({'role': 'assistant', 'content': assistant_message})
+        
+        # Print assistant's response
+        print(f"Assistant: {assistant_message}")
+except Exception as e:
+    print(f"An error occurred: {e}")
 
 # Save chat
 with open(Path('lab03/attempts.txt'), 'a') as f:
