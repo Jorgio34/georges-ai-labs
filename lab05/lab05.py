@@ -5,6 +5,9 @@ sys.path.append(str(Path(__file__).parents[1]))
 import random
 from util.llm_utils import run_console_chat, tool_tracker
 
+# Add the parent directory to the system path
+sys.path.append(str(Path(__file__).parents[1]))
+
 # beauty of Python
 @tool_tracker
 def process_function_call(function_call):
@@ -27,5 +30,22 @@ def process_response(self, response):
     # and make the function call 
     return response
 
+
+def process_response(self, response):
+    # Fill out this function to process the response from the LLM
+    # and make the function call 
+    # Extract the function call from the response
+    function_call = response.get('function_call')
+    
+    if function_call:
+        # Process the function call using the process_function_call method
+        result = process_function_call(function_call)
+        
+        # Update the response with the result of the function call
+        response['result'] = result
+    
+    return response
+
 run_console_chat(template_file='lab05/lab05_dice_template.json',
                  process_response=process_response)
+

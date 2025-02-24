@@ -22,14 +22,16 @@ def run_console_chat(sign, **kwargs):
 
 # Define the lab04_params dictionary
 lab04_params = {
-    'template_file': 'lab04/test/test_trader.py',  
-    'sign': 'Georges Guy Jonathan Piatchou',  
-    'end_regex': r'Thank you for the trade'
+    'template_file': 'lab04/test/test_trader.py', 
+    'recruit_difficulty': 'not easy', 
+    'reward': 'a sword',
+    'sign': 'Piatchou',  
+    'end_regex': r'RECRUIT(.*)DONE'
 }  
 
 if __name__ == '__main__':
     # Sign your name
-    lab04_params['sign'] = 'Georges Guy Jonathan Piatchou'  
+    lab04_params['sign'] = 'Piatchou'  
 
     # Run lab04.py to test your template interactively
     run_console_chat(**lab04_params)
