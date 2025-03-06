@@ -13,7 +13,6 @@ from typing import List, Dict, Any
 import chromadb
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 
-
 import ollama
 import numpy as np
 
@@ -29,8 +28,12 @@ class OllamaEmbeddingFunction:
     
     def __call__(self, input: List[str]) -> List[List[float]]:
         """Generate embeddings for a list of texts using Ollama"""
-        pass
-
+        embeddings = []
+        for text in input:
+            response = ollama.embed(model=self.model_name, input=text)
+            print(response)  # Print the response to inspect its structure
+            embeddings.append(response["embedding"])  # Adjust this line based on the actual response structure
+        return embeddings
 
 def load_documents(data_dir: str) -> Dict[str, str]:
     """
@@ -116,8 +119,12 @@ def retrieve_context(collection: chromadb.Collection, query: str, n_results: int
     """
     Retrieve relevant context from ChromaDB based on the query
     """
-    pass
-
+    results = collection.query(
+        query_texts=[query],
+        n_results=n_results
+    )
+    contexts = [result["text"] for result in results["documents"]]
+    return contexts
 
 
 def generate_response(query: str, contexts: List[str], model: str = "mistral:latest") -> str:
@@ -209,4 +216,4 @@ def main():
     
 
 if __name__ == "__main__":
-    main() 
+    main()
